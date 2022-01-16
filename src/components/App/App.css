@@ -1,11 +1,11 @@
 .App {
-    text-align: center;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+    max-width: 900px;
+    margin: 30px auto;
+    overflow: auto;
+    min-height: 300px;
+    border: 3px solid #282c34;
+    padding: 30px 30px 30px 50px;
+    border-radius: 15px;
 }
 
 .App-link {
