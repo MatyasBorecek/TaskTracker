@@ -2,7 +2,7 @@ import { useState }  from "react";
 import ApiTaskHelper from "../../../helper/ApiHelper/ApiHelper";
 import './AddForm.css';
 
-const AddForm = ({performCallForNewTask}) => {
+const AddForm = ({taskLoadAfterSave}) => {
     const [name, setName] = useState('');
     const [reminder, setReminder] = useState(false);
 
@@ -21,6 +21,7 @@ const AddForm = ({performCallForNewTask}) => {
             alert('Please specify task name.');
         }
         await apiHelper.addNewTask({name: name, reminder: reminder});
+        taskLoadAfterSave(await apiHelper.fetchTasks());
 
         initStates();
     };

@@ -1,4 +1,5 @@
 import Task                    from "../Task/Task";
+import AddForm                 from "../App/AddForm/AddForm";
 import { useEffect, useState } from "react";
 import ApiTaskHelper           from "../../helper/ApiHelper/ApiHelper";
 
@@ -23,9 +24,7 @@ const Tasks = () => {
 
     const deleteTask = async (id) => {
         const res = await apiHelper.deleteTask(id);
-        res.status === 200 ?
-            setTasks(tasks.filter((task) => (task.id !== id))) :
-            alert('Error Deleting This Task')
+        res.status === 200 && setTasks(tasks.filter((task) => (task.id !== id)));
     };
 
     const changeReminderState = async (id) => {
@@ -41,13 +40,16 @@ const Tasks = () => {
     };
 
     return (
-        <ul>
-            {
-                tasks.map((task) => {
-                    return <Task task={task} deleteTask={deleteTask} changeReminderState={changeReminderState}/>
-                })
-            }
-        </ul>
+        <>
+            <AddForm taskLoadAfterSave={setTasks}/>
+            <ul>
+                {
+                    tasks.map((task) => {
+                        return <Task task={task} deleteTask={deleteTask} changeReminderState={changeReminderState}/>
+                    })
+                }
+            </ul>
+        </>
     );
 };
 

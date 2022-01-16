@@ -7,7 +7,6 @@ const App = () => {
     return (
         <div className="App">
             <Header/>
-            <AddForm/>
             <Tasks/>
         </div>
     );
