@@ -1,12 +1,15 @@
 import Task                    from "../Task/Task";
 import { useEffect, useState } from "react";
+import ApiTaskHelper           from "../../helper/ApiHelper/ApiHelper";
 
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);
 
+    const apiHelper = new ApiTaskHelper();
+
     useEffect(() => {
             const getTasks = async () => {
-                const tasksFromServer = await fetchTasks();
+                const tasksFromServer = await apiHelper.fetchTasks();
                 setTasks(tasksFromServer);
             }
 
@@ -18,45 +21,24 @@ const Tasks = () => {
         }, []
     );
 
-    const fetchTasks = async () => {
-        const res = await fetch('http://localhost:5000/tasks');
-        return await res.json();
-    };
-
-    const fetchSingleTask = async (id) => {
-        const res = await fetch(`http://localhost:5000/tasks/${id}`);
-        return await res.json();
-    };
-
     const deleteTask = async (id) => {
-        const res = await fetch(`http://localhost:5000/tasks/${id}`, {method: 'DELETE'});
+        const res = await apiHelper.deleteTask(id);
         res.status === 200 ?
             setTasks(tasks.filter((task) => (task.id !== id))) :
             alert('Error Deleting This Task')
     };
 
     const changeReminderState = async (id) => {
-        const taskToToggle = await fetchSingleTask(id);
-        const updTask = {...taskToToggle, reminder: !taskToToggle.reminder};
-
-        const res = await fetch(`http://localhost:5000/tasks/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify(updTask),
-        });
-        const data = await res.json();
-
+        const res = await apiHelper.changeReminder(id);
         setTasks(
             tasks.map(
                 task =>
                     task.id === id ?
-                        {...task, reminder: data.reminder} :
+                        {...task, reminder: res.reminder} :
                         task
             )
         );
-    }
+    };
 
     return (
         <ul>
@@ -67,6 +49,6 @@ const Tasks = () => {
             }
         </ul>
     );
-}
+};
 
 export default Tasks;
