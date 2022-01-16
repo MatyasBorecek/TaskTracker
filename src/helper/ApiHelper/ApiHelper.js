@@ -35,13 +35,13 @@ class ApiTaskHelper {
     async addNewTask(newTask) {
         const res = await fetch(this.#testingApiUri,
             {
-                method: 'PUT',
+                method: 'POST',
                 headers: {
                     'Content-type': 'application/json',
                 },
                 body: JSON.stringify(newTask),
             });
-        console.log(await (res.json()));
+
         return await res.json();
     };
 }
