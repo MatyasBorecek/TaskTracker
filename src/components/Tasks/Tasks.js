@@ -11,20 +11,17 @@ const Tasks = () => {
     useEffect(() => {
             const getTasks = async () => {
                 const tasksFromServer = await apiHelper.fetchTasks();
-                setTasks(tasksFromServer);
+                await setTasks(tasksFromServer);
             }
 
-            getTasks().catch(err => {
-                if (err) {
-                    throw err;
-                }
-            });
+            getTasks();
         }, []
     );
 
     const deleteTask = async (id) => {
+        //NOTE: Dunno why @var res is blank object
         const res = await apiHelper.deleteTask(id);
-        res.status === 200 && setTasks(tasks.filter((task) => (task.id !== id)));
+        setTasks(tasks.filter((task) => (task.id !== id)));
     };
 
     const changeReminderState = async (id) => {
@@ -44,8 +41,12 @@ const Tasks = () => {
             <AddForm taskLoadAfterSave={setTasks}/>
             <ul>
                 {
-                    tasks.map((task) => {
-                        return <Task task={task} deleteTask={deleteTask} changeReminderState={changeReminderState}/>
+                    tasks.map((task, index) => {
+                        return <Task key={index}
+                                     task={task}
+                                     deleteTask={deleteTask}
+                                     changeReminderState={changeReminderState}
+                        />
                     })
                 }
             </ul>
